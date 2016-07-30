@@ -4,7 +4,8 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
-	string line;
+	string input;
+	regex validator ("^(-g (seed|[[:digit:]]) [[:digit:]]{1,4} [[:digit:]]{1,4}($|( --sv [[:word:]]*\.svg| --sb [[:word:]]*\.maze){0,2})|--lb [[:word:]]*\.maze($| --sv [[:word:]]*\.svg))$");
 
 
 	if(argc < 2 || argc > 9)
@@ -17,19 +18,12 @@ int main(int argc, char * argv[])
 		return 0;
 	}
 
-	if(strcmp(argv[1],LOAD_BINARY) == 0)
+	if(regex_match(argv,validator))
 	{
-			// if()
-
-
-			cout << "Success!\n";
-			return 0;
+		cout << "We have takeoff!\n";
 	}
-	else if(strcmp(argv[1],GENERATE) == 0)
-	{
-			cout << "More Success!\n";
-			return 0;
-	}
+
+	
 
 	return 0;
 }
