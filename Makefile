@@ -2,4 +2,4 @@ CC = g++
 CFLAGS = -std=c++14 -Wall -pedantic
 
 all: main.cpp
-	$(CC) $^ -o $(CFLAGS) $@ -g
+	$(CC) $(CFLAGS) $^ -o  $@ 

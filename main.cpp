@@ -4,8 +4,8 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
-	string input;
-	regex validator ("^(-g (seed|[[:digit:]]) [[:digit:]]{1,4} [[:digit:]]{1,4}($|( --sv [[:word:]]*\.svg| --sb [[:word:]]*\.maze){0,2})|--lb [[:word:]]*\.maze($| --sv [[:word:]]*\.svg))$");
+	string input(*argv);
+	regex validator ("^(-g (seed|[[:digit:]]) [[:digit:]]{1,4} [[:digit:]]{1,4}($|( --sv [[:word:]]*\\.svg| --sb [[:word:]]*\\.maze){0,2})|--lb [[:word:]]*\\.maze($| --sv [[:word:]]*\\.svg))$");
 
 
 	if(argc < 2 || argc > 9)
@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
 		return 0;
 	}
 
-	if(regex_match(argv,validator))
+	if(regex_match(input,validator))
 	{
 		cout << "We have takeoff!\n";
 	}
