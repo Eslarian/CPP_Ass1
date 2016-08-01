@@ -4,8 +4,9 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
-	string input(*argv);
-	regex validator ("^(-g (seed|[[:digit:]]) [[:digit:]]{1,4} [[:digit:]]{1,4}($|( --sv [[:word:]]*\\.svg| --sb [[:word:]]*\\.maze){0,2})|--lb [[:word:]]*\\.maze($| --sv [[:word:]]*\\.svg))$");
+	string input ("fuck you");
+	// regex validator ("^(-g (seed|[[:digit:]]) [[:digit:]]{1,4} [[:digit:]]{1,4}($|( --sv [[:word:]]*\\.svg| --sb [[:word:]]*\\.maze){0,2})|--lb [[:word:]]*\\.maze($| --sv [[:word:]]*\\.svg))$");
+	regex validator ("(fuck) (you)");
 
 
 	if(argc < 2 || argc > 9)
