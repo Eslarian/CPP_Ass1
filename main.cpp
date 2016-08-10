@@ -6,7 +6,8 @@ int main(int argc, char * argv[])
 {
 	string input ("fuck you");
 	// regex validator ("^(-g (seed|[[:digit:]]) [[:digit:]]{1,4} [[:digit:]]{1,4}($|( --sv [[:word:]]*\\.svg| --sb [[:word:]]*\\.maze){0,2})|--lb [[:word:]]*\\.maze($| --sv [[:word:]]*\\.svg))$");
-	regex validator ("(fuck) (you)");
+	regex validator ("[[:digit:]]*|([[:alnum:]]*[[:space:]]*)*");
+	//^((-g[[:space:]])({empty}|[[:digit:]]{1,2})({empty}|[[:space:]][[:digit:]]{1,4})({empty}|[[:space:]][[:digit:]]{1,4})($|([[:space:]]--sv[[:space:]][[:word:]]*\.svg|[[:space:]]--sb[[:space:]][[:word:]]*\.maze){0,2})) 
 
 
 	if(argc < 2 || argc > 9)
