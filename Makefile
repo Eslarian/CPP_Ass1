@@ -1,5 +1,5 @@
 CC = g++
-CFLAGS = -std=c++14 -Wall -pedantic
+CFLAGS = -std=c++14 -Wall -pedantic -g
 
-all: main.cpp
+all: *.cpp
 	$(CC) $(CFLAGS) $^ -o  $@ 

@@ -1,29 +1,29 @@
-#include "utility.h"
+#include "inputhandler.cpp"
 
 using namespace std;
 
 int main(int argc, char * argv[])
 {
-	string input ("fuck you");
-	// regex validator ("^(-g (seed|[[:digit:]]) [[:digit:]]{1,4} [[:digit:]]{1,4}($|( --sv [[:word:]]*\\.svg| --sb [[:word:]]*\\.maze){0,2})|--lb [[:word:]]*\\.maze($| --sv [[:word:]]*\\.svg))$");
-	regex validator ("[[:digit:]]*|([[:alnum:]]*[[:space:]]*)*");
-	//^((-g[[:space:]])({empty}|[[:digit:]]{1,2})({empty}|[[:space:]][[:digit:]]{1,4})({empty}|[[:space:]][[:digit:]]{1,4})($|([[:space:]]--sv[[:space:]][[:word:]]*\.svg|[[:space:]]--sb[[:space:]][[:word:]]*\.maze){0,2})) 
+	
+	InputHandler inputManager;
 
-
-	if(argc < 2 || argc > 9)
+	if(!inputManager.check_input(argv,argc))
 	{
-		cout << "Invalid args, usage:"
-		<< "--lb, Load Binary file: filename.maze\n"
-		<< "--sb, Save Binary file: filename.maze\n"
-		<< "--sv, Save SVG file: filename.svg\n"
-		<< "-g, Generate maze: seed width height\n";
+		cout << "Invalid args, usage:" << endl
+		<< "--lb, Load Binary file: filename.maze" << endl
+		<< "--sb, Save Binary file: filename.maze" << endl
+		<< "--sv, Save SVG file: filename.svg" << endl
+		<< "-g, Generate maze: seed width height" << endl;
 		return 0;
 	}
 
-	if(regex_match(input,validator))
-	{
-		cout << "We have takeoff!\n";
-	}
+	// for(unsigned i = 0; i < m.size();i++)
+	// {
+	// 		cout << "match #" << i << ":" << m[i] << endl;
+	// }	
+
+
+
 
 	
 
