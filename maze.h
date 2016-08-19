@@ -1,9 +1,10 @@
-#include <utility.h>
+#include "inputhandler.h"
 
 typedef struct Cell
 {
 	int x;
 	int y;
+
 }Cell; 
 
 typedef struct Edge
@@ -16,13 +17,16 @@ class Maze
 {
 	int width;
 	int height;
-	int numEdeges;
+	int numEdges;
 	Cell entrance;
 	Cell exit;
+	vector<Edge> edges;
 	
 	public: 
 	
-		void load_binary(string filename); 
+		bool load_binary(string filename); 
+		bool is_in(Cell checkCell);
+
 
 
 

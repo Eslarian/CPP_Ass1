@@ -17,7 +17,7 @@ int main(int argc, char * argv[])
 		<< "-g, Generate maze: seed width height" << endl;
 		return EXIT_FAILURE; 
 	}
-
+	
 	
 
 	return EXIT_SUCCESS;

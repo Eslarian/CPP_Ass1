@@ -15,7 +15,6 @@ bool InputHandler::check_input(char ** args, int numArgs)
 	}
 
 	
-
 	bool retVal = regex_match(input,matchArray,test);
 	
 	for(unsigned i = 0; i < matchArray.size();i++)
@@ -24,7 +23,7 @@ bool InputHandler::check_input(char ** args, int numArgs)
 		captures.push_back(matchArray[i]);
 	}
 
-	cout << captures[0] << endl;
+	//cout << captures[0] << endl;
 
 	return retVal;
 }
