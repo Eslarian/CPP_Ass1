@@ -16,16 +16,19 @@ using namespace std;
 		for(int i = 0; i < numEdges; ++i)
 		{
 
-			// binfile.read((char*) &castEdge.source.x, sizeof(int));
-			// binfile.read((char*) &castEdge.source.y, sizeof(int));
+			binfile.read((char*) &castEdge.source.x, sizeof(int));
+			binfile.read((char*) &castEdge.source.y, sizeof(int));
 
-			// binfile.read((char*) &castEdge.source.x, sizeof(int));
-			// binfile.read((char*) &castEdge.source.y, sizeof(int));
+			binfile.read((char*) &castEdge.destination.x, sizeof(int));
+			binfile.read((char*) &castEdge.destination.y, sizeof(int));
+
+			edges.push_back(castEdge);
+			
+			// TODO: remove debug print
+			// cout << "Source: " << edges[i].source.x << "," << edges[i].source.y;
+			// cout << " Destination: " << edges[i].destination.x << "," << edges[i].destination.y << endl;
 		}
 
-		
-		
-	
 		return false;
 	}
 
