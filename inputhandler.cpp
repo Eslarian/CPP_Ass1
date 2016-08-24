@@ -5,6 +5,9 @@ using namespace std;
 			
 bool InputHandler::check_input(char ** args, int numArgs)
 {
+	/*Whilst I've endeavoured to respect the 80 character limit, this particular
+	I could not find a way to separate this line of regex out, since it is 
+	sensitive to spaces as part of the matching*/
 	regex test("^(-g(| [[:digit:]]*)(| [[:digit:]]{1,4})(| [[:digit:]]{1,4})((| --sv [[:alnum:]]*\\.svg)|(| --sb [[:alnum:]]*\\.maze)){1,2}$)|(--lb [[:alnum:]]*\\.maze(| --sv [[:alnum:]]*\\.svg)$)");
 	string input;
 	for(int i = 1; i < numArgs; i++)
