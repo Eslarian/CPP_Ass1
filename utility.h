@@ -14,10 +14,11 @@
 #include <cstdlib>
 #include <chrono>
 #include <random>
+#include <unordered_set>
 
 #define LOAD_BINARY "--lb"
 #define GENERATE "-g"
-#define NUM_NEIGH 4
+#define NUM_DIRS 4
 #define LEFT 0
 #define RIGHT 1
 #define UP 2

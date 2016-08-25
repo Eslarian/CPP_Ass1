@@ -15,15 +15,7 @@ Cell::Cell(int x, int y)
 	this->x = x;
 	this->y = y;
 
-	// for(int i = 0; i < NUM_NEIGH; ++i)
-	// {
-	// 	Cell castCell;
-	// 	castCell.x = x + xDirs[i];
-	// 	castCell.y = y + yDirs[i];	 
-	// 	if(is_in(castCell))
-	// 		neigh[i] = castCell;
-	// }	
-
+	visited = false;
 	
 }
 
