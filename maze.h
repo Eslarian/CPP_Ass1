@@ -57,6 +57,7 @@ class Maze
 		bool is_in(int x, int y);
 		bool on_border(Cell checkCell);
 		bool compare_edge(Edge firstEdge, Edge secondEdge);
+		void make_gateways(Cell gateway);
 		void remove_edge(Edge deadEdge);
 		void init_maze(int width, int height, int seed = 0);
 		void gen_maze();

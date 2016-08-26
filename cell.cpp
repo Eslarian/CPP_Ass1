@@ -16,6 +16,7 @@ Cell::Cell(int x, int y)
 	this->y = y;
 
 	visited = false;
+	neigh.resize(4);
 	
 }
 

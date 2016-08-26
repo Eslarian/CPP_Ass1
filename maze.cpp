@@ -15,6 +15,9 @@ using namespace std;
 		this->width = width;
 		this->height = height;
 
+		cout << width << endl;
+		cout << height << endl;
+
 		//Reserve space for the map
 		map.resize(width,vector<Cell>(height));
 		
@@ -109,9 +112,14 @@ using namespace std;
 		
 		mt19937 generator;
 		generator.seed((this->seed));
+
+		//Break wall for entrance an exit
+		make_gateways(entrance);
+		make_gateways(exit);
+
 		
 		Cell castCell = map[entrance.x][entrance.y];
-		Cell neighCell;
+		
 		Edge castEdge;
 		
 		uniform_int_distribution<int> rng(0,3);
@@ -119,16 +127,30 @@ using namespace std;
 		while(visitedCells > 0)
 		{
 			//Set cell to visited, update count;
-			map[castCell.x][castCell.y].visited = true;
-			visitedCells--;
+			if(!map[castCell.x][castCell.y].visited)
+			{	
+				map[castCell.x][castCell.y].visited = true;
+				visitedCells--;
+			} 
+
 			ranDir = rng(generator);
+
+
+			int x = castCell.x + xDirs[ranDir];
+			int y = castCell.y + yDirs[ranDir];
+			
+						
+			// if(is_in(x,y))
+			// 	castCell = map[x][y];
+
 			//If the calculated neighbour cell is a valid cell
-			if(is_in(castCell.x + xDirs[ranDir], castCell.y + yDirs[ranDir]))
+			if(is_in(x, y))
 			{
+				 
 				//If the neighbour hasn't been visited
-				if(!map[castCell.x + xDirs[ranDir]][castCell.y + \
-				 yDirs[ranDir]].visited)
+				if(!map[x][y].visited)
 				{
+
 					//Remove the wall between our cell and the neighbour
 					castEdge.source.x = castCell.x + xSourceDirs[ranDir];
 					castEdge.source.y = castCell.y + ySourceDirs[ranDir];
@@ -136,12 +158,10 @@ using namespace std;
 					castEdge.destination.y = castCell.y + yDestDirs[ranDir];
 					remove_edge(castEdge);
 
-					//now visit the neighbour
-					castCell = map[castCell.x + xDirs[ranDir]][castCell.y + \
-				 yDirs[ranDir]];
-
-
+										
 				}
+				//now visit the neighbour
+				castCell = map[x][y];
 
 			}
 
@@ -152,6 +172,52 @@ using namespace std;
 
 	}
 
+	void Maze::make_gateways(Cell gateway)
+	{
+		Edge removeEdge;
+		if(gateway.x == 0)
+		{
+
+			removeEdge.source.x = gateway.x + xSourceDirs[LEFT];
+			removeEdge.source.y = gateway.y + ySourceDirs[LEFT];
+			removeEdge.destination.x = gateway.x + xDestDirs[LEFT];
+			removeEdge.destination.y = gateway.y + yDestDirs[LEFT];
+			remove_edge(removeEdge);
+
+		}
+		if(gateway.x == width-1)
+		{
+
+			removeEdge.source.x = gateway.x + xSourceDirs[RIGHT];
+			removeEdge.source.y = gateway.y + ySourceDirs[RIGHT];
+			removeEdge.destination.x = gateway.x + xDestDirs[RIGHT];
+			removeEdge.destination.y = gateway.y + yDestDirs[RIGHT];
+			remove_edge(removeEdge);
+
+		}
+		if(gateway.y == 0)
+		{
+
+			removeEdge.source.x = gateway.x + xSourceDirs[UP];
+			removeEdge.source.y = gateway.y + ySourceDirs[UP];
+			removeEdge.destination.x = gateway.x + xDestDirs[UP];
+			removeEdge.destination.y = gateway.y + yDestDirs[UP];
+			remove_edge(removeEdge);
+
+		}
+		if(gateway.y == height-1)
+		{
+
+			removeEdge.source.x = gateway.x + xSourceDirs[DOWN];
+			removeEdge.source.y = gateway.y + ySourceDirs[DOWN];
+			removeEdge.destination.x = gateway.x + xDestDirs[DOWN];
+			removeEdge.destination.y = gateway.y + yDestDirs[DOWN];
+			remove_edge(removeEdge);
+
+		}
+
+	}
+
 	bool Maze::save_svg(string filename)
 	{
 
@@ -159,25 +225,26 @@ using namespace std;
 		{
 			ofstream svgfile(filename);
 			//FIXME assert file is open
+			//FIXME So many magic numbers
 			
 			//Write file headers
-			svgfile << "<svg width=\"" << width << "\" ";
-			svgfile << "height=\"" << height << "\" ";
+			svgfile << "<svg width=\"" << width*100 << "\" ";
+			svgfile << "height=\"" << height*100 << "\" ";
 			svgfile << "xmlns=\"http://www.w3.org/2000/svg\" >" << endl;
 
-			svgfile << "<rect width=\"" << width << "\" ";
-			svgfile << "height=\"" << height << "\" ";
-			svgfile << "style=\"fill:black\" />" << endl;;
+			svgfile << "<rect width=\"" << (width)*200 << "\" ";
+			svgfile << "height=\"" << (height)*200 << "\" ";
+			svgfile << "style=\"fill:white\" />" << endl;;
 			
 			//Write in all edges
-			for(int i = 0; i < edges.size(); ++i)
+			for(unsigned int i = 0; i < edges.size(); ++i)
 			{
-				svgfile << "<line stroke=\"white\" ";
+				svgfile << "<line stroke=\"black\" ";
 
-				svgfile << "x1=\"" << edges[i].source.x << "\" ";
-				svgfile << "x2=\"" << edges[i].destination.x << "\" ";
-				svgfile << "y1=\"" << edges[i].source.y << "\" ";
-				svgfile << "y2=\"" << edges[i].destination.y << "\" ";
+				svgfile << "x1=\"" << edges[i].source.x *100<< "\" ";
+				svgfile << "x2=\"" << edges[i].destination.x *100 << "\" ";
+				svgfile << "y1=\"" << edges[i].source.y *100<< "\" ";
+				svgfile << "y2=\"" << edges[i].destination.y *100<< "\" ";
 
 				svgfile << "stroke-width=\"5\" />" << endl;
 
@@ -196,6 +263,7 @@ using namespace std;
 		return false;
 
 	}
+
 
 
 	bool Maze::load_binary(string filename)
@@ -267,7 +335,7 @@ using namespace std;
 			//Remove the edge
 			if(compare_edge(edges[i],deadEdge) || \
 				compare_edge(edges[i],reverseEdge))
-				edges.erase(edges.begin() + i);
+				this->edges.erase(edges.begin() + i);
 
 		}
 
@@ -288,7 +356,7 @@ using namespace std;
 
 	bool Maze::is_in(Cell checkCell)
 	{
-		if(checkCell.x >= 0 && checkCell.x <= width && checkCell.y >= 0 && checkCell.y <= height)
+		if(checkCell.x >= 0 && checkCell.x < width && checkCell.y >= 0 && checkCell.y < height)
 			return true;
 
 		return false;
@@ -296,7 +364,7 @@ using namespace std;
 
 	bool Maze::is_in(int x, int y)
 	{
-		if(x <= width && y <= height)
+		if(x >= 0 && x < width && y >= 0 && y < height)
 			return true;
 
 		return false;

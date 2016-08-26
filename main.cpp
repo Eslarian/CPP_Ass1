@@ -33,7 +33,8 @@ int main(int argc, char * argv[])
 	
 	localmaze.load_binary("../binary.maze");
 	Cell test(2,2);
-	testgen.init_maze(5,5);
+	testgen.init_maze(30,30);
+	testgen.gen_maze();
 	testgen.save_svg("mykek.svg");
 	//TODO Remove debugs
 	// test1.source.x = 1;
