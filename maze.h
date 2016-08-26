@@ -51,7 +51,8 @@ class Maze
 		vector<Edge> edges;
 	
 		//Functions
-		bool load_binary(string filename); 
+		bool load_binary(string filename);
+		bool save_svg(string filename);
 		bool is_in(Cell checkCell);
 		bool is_in(int x, int y);
 		bool on_border(Cell checkCell);

@@ -152,6 +152,51 @@ using namespace std;
 
 	}
 
+	bool Maze::save_svg(string filename)
+	{
+
+		if(!edges.empty()) 
+		{
+			ofstream svgfile(filename);
+			//FIXME assert file is open
+			
+			//Write file headers
+			svgfile << "<svg width=\"" << width << "\" ";
+			svgfile << "height=\"" << height << "\" ";
+			svgfile << "xmlns=\"http://www.w3.org/2000/svg\" >" << endl;
+
+			svgfile << "<rect width=\"" << width << "\" ";
+			svgfile << "height=\"" << height << "\" ";
+			svgfile << "style=\"fill:black\" />" << endl;;
+			
+			//Write in all edges
+			for(int i = 0; i < edges.size(); ++i)
+			{
+				svgfile << "<line stroke=\"white\" ";
+
+				svgfile << "x1=\"" << edges[i].source.x << "\" ";
+				svgfile << "x2=\"" << edges[i].destination.x << "\" ";
+				svgfile << "y1=\"" << edges[i].source.y << "\" ";
+				svgfile << "y2=\"" << edges[i].destination.y << "\" ";
+
+				svgfile << "stroke-width=\"5\" />" << endl;
+
+			}
+			
+			//Close svg tag
+			svgfile << "</svg>";
+					
+			return true;
+
+						
+		
+
+		} 
+
+		return false;
+
+	}
+
 
 	bool Maze::load_binary(string filename)
 	{
