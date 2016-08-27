@@ -14,9 +14,8 @@ using namespace std;
 	{
 		this->width = width;
 		this->height = height;
+		this->numEdges = (width+1)*width + (height+1)*height;
 
-		cout << width << endl;
-		cout << height << endl;
 
 		//Reserve space for the map
 		map.resize(width,vector<Cell>(height));
@@ -28,7 +27,7 @@ using namespace std;
 
 		
 		//Reserve space for the edges, setting up maze full of walls
-		edges.reserve((width+1)*width + (height+1)*height);
+		edges.reserve(numEdges);
 
 		for(int i = 0; i < width; ++i)
 		{
@@ -264,6 +263,29 @@ using namespace std;
 
 	}
 
+	bool Maze::save_binary(string filename)
+	{
+		ofstream binfile(filename,ios::binary);
+
+		binfile.write((char*) &width, sizeof(int));
+		binfile.write((char*) &height, sizeof(int));
+		binfile.write((char*) &numEdges, sizeof(int));
+
+		for(unsigned int i = 0; i < edges.size(); ++i)
+		{
+
+			binfile.write((char*) &edges[i].source.x, sizeof(int));
+			binfile.write((char*) &edges[i].source.y, sizeof(int));
+
+			binfile.write((char*) &edges[i].destination.x, sizeof(int));
+			binfile.write((char*) &edges[i].destination.y, sizeof(int));
+
+		}
+
+		return true;
+
+
+	}
 
 
 	bool Maze::load_binary(string filename)
@@ -293,8 +315,10 @@ using namespace std;
 			// cout << " Destination: " << edges[i].destination.x << "," << edges[i].destination.y << endl;
 		}
 
-		return false;
+		return true;
 	}
+
+
 
 	bool Maze::compare_edge(Edge firstEdge, Edge secondEdge)
 	{
