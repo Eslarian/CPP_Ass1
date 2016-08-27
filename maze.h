@@ -8,6 +8,10 @@
  *****************************************************************************/
 using namespace std;
 
+#define MAGNIFY 100 
+#define DEFAULT_W 10
+#define DEFAULT_H 10
+
 #include "cell.h"
 
 typedef std::chrono::high_resolution_clock myclock;
@@ -58,6 +62,7 @@ class Maze
 		bool is_in(int x, int y);
 		bool on_border(Cell checkCell);
 		bool compare_edge(Edge firstEdge, Edge secondEdge);
+		bool validate_edge(Edge chkEdge);
 		void make_gateways(Cell gateway);
 		void remove_edge(Edge deadEdge);
 		void init_maze(int width = 10, int height = 10, int seed = 0);

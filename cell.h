@@ -14,8 +14,7 @@
 	 	int x;
 	 	int y;
 	 	bool visited;
-	 	std::vector<Cell> neigh;
-	
+	 		
 	 	//Constructors
 	 	Cell(int x,int y);
 	 	Cell();

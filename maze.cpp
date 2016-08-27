@@ -20,8 +20,6 @@ using namespace std;
 		//Reserve space for the map
 		map.resize(width,vector<Cell>(height));
 		
-		//Facsimile cell to initialize cell neighbour vectors
-		Cell voidCell(-1,-1);
 		//Clock for seeding if seed isn't provided
 		myclock::time_point beginning = myclock::now();
 
@@ -29,20 +27,17 @@ using namespace std;
 		//Reserve space for the edges, setting up maze full of walls
 		edges.reserve(numEdges);
 
+
+		//Initialize cell map 
 		for(int i = 0; i < width; ++i)
 		{
 			for(int k = 0; k < height; ++k)
 			{
 				Cell castCell(i,k);
-				castCell.neigh.resize(NUM_DIRS,voidCell);
 				
+				//Build edges (walls) for the cell				
 				for(int d = 0; d < NUM_DIRS; ++d)
 				{
-				
-					Cell neighCast(i + xDirs[d] , k + yDirs[d]);	 
-					if(is_in(neighCast))
-						castCell.neigh[d] = neighCast;
-
 					Edge castEdge;
 
 					castEdge.source.x = i + xSourceDirs[d];
@@ -58,6 +53,7 @@ using namespace std;
 			}
 		}
 	
+		//Default value indicates no seed was given
 		if(seed == 0)
 		{
 			
@@ -79,6 +75,8 @@ using namespace std;
 		uniform_int_distribution<int> rngHeight(0,height-1);
 		Cell castEntrance;
 		Cell castExit;
+
+		//Randomly select cells until one is found on the border of the maze
 		do
 		{
 			castEntrance.x = rngWidth(generator);
@@ -96,7 +94,7 @@ using namespace std;
 			
 		}while(!on_border(castExit));
 
-		
+		//Store border cells as entrance and exit
 		this->entrance = castEntrance;
 		this->exit = castExit;
 
@@ -116,13 +114,15 @@ using namespace std;
 		make_gateways(entrance);
 		make_gateways(exit);
 
-		
+		//Start with entrance
+		//NOTE, should ideally choose arbitrary random cell
 		Cell castCell = map[entrance.x][entrance.y];
 		
 		Edge castEdge;
 		
 		uniform_int_distribution<int> rng(0,3);
 
+		//Loop until all cells have been visited
 		while(visitedCells > 0)
 		{
 			//Set cell to visited, update count;
@@ -134,13 +134,9 @@ using namespace std;
 
 			ranDir = rng(generator);
 
-
 			int x = castCell.x + xDirs[ranDir];
 			int y = castCell.y + yDirs[ranDir];
 			
-						
-			// if(is_in(x,y))
-			// 	castCell = map[x][y];
 
 			//If the calculated neighbour cell is a valid cell
 			if(is_in(x, y))
@@ -171,6 +167,7 @@ using namespace std;
 
 	}
 
+	//Used to break the walls for the entrance and the exit
 	void Maze::make_gateways(Cell gateway)
 	{
 		Edge removeEdge;
@@ -223,16 +220,15 @@ using namespace std;
 		if(!edges.empty()) 
 		{
 			ofstream svgfile(filename);
-			//FIXME assert file is open
-			//FIXME So many magic numbers
-			
+			assert(svgfile.is_open());
+								
 			//Write file headers
-			svgfile << "<svg width=\"" << width*100 << "\" ";
-			svgfile << "height=\"" << height*100 << "\" ";
+			svgfile << "<svg width=\"" << width * MAGNIFY << "\" ";
+			svgfile << "height=\"" << height * MAGNIFY << "\" ";
 			svgfile << "xmlns=\"http://www.w3.org/2000/svg\" >" << endl;
 
-			svgfile << "<rect width=\"" << (width)*200 << "\" ";
-			svgfile << "height=\"" << (height)*200 << "\" ";
+			svgfile << "<rect width=\"" << width * MAGNIFY << "\" ";
+			svgfile << "height=\"" << height * MAGNIFY << "\" ";
 			svgfile << "style=\"fill:white\" />" << endl;;
 			
 			//Write in all edges
@@ -240,10 +236,10 @@ using namespace std;
 			{
 				svgfile << "<line stroke=\"black\" ";
 
-				svgfile << "x1=\"" << edges[i].source.x *100<< "\" ";
-				svgfile << "x2=\"" << edges[i].destination.x *100 << "\" ";
-				svgfile << "y1=\"" << edges[i].source.y *100<< "\" ";
-				svgfile << "y2=\"" << edges[i].destination.y *100<< "\" ";
+				svgfile << "x1=\"" << edges[i].source.x *MAGNIFY<< "\" ";
+				svgfile << "x2=\"" << edges[i].destination.x *MAGNIFY << "\" ";
+				svgfile << "y1=\"" << edges[i].source.y *MAGNIFY<< "\" ";
+				svgfile << "y2=\"" << edges[i].destination.y *MAGNIFY<< "\" ";
 
 				svgfile << "stroke-width=\"5\" />" << endl;
 
@@ -266,10 +262,13 @@ using namespace std;
 	bool Maze::save_binary(string filename)
 	{
 		ofstream binfile(filename,ios::binary);
+		assert(binfile.is_open());
 
 		binfile.write((char*) &width, sizeof(int));
 		binfile.write((char*) &height, sizeof(int));
 		binfile.write((char*) &numEdges, sizeof(int));
+
+
 
 		for(unsigned int i = 0; i < edges.size(); ++i)
 		{
@@ -292,34 +291,41 @@ using namespace std;
 	{
 
 		ifstream binfile(filename,ios::binary);
+		assert(binfile.is_open());
 		
 		binfile.read((char*) &width, sizeof(int));
 		binfile.read((char*) &height, sizeof(int));
 		binfile.read((char*) &numEdges, sizeof(int));
 			
-		
-		Edge castEdge;
+		if(width < DEFAULT_W || height < DEFAULT_H || numEdges < 0)
+			return false;
+
+
+		Edge * castEdge = (Edge*)malloc(sizeof(Edge));
 		for(int i = 0; i < numEdges; ++i)
 		{
 
-			binfile.read((char*) &castEdge.source.x, sizeof(int));
-			binfile.read((char*) &castEdge.source.y, sizeof(int));
+			binfile.read((char*) &castEdge->source.x, sizeof(int));
+			binfile.read((char*) &castEdge->source.y, sizeof(int));
 
-			binfile.read((char*) &castEdge.destination.x, sizeof(int));
-			binfile.read((char*) &castEdge.destination.y, sizeof(int));
+			binfile.read((char*) &castEdge->destination.x, sizeof(int));
+			binfile.read((char*) &castEdge->destination.y, sizeof(int));
 
-			edges.push_back(castEdge);
+			if(!validate_edge(*castEdge))
+			{
+				cout << "Ruh-roh" << endl;
+				return false;
+			}
+
+			edges.push_back(*castEdge);
 			
-			// TODO: remove debug print
-			// cout << "Source: " << edges[i].source.x << "," << edges[i].source.y;
-			// cout << " Destination: " << edges[i].destination.x << "," << edges[i].destination.y << endl;
 		}
 
 		return true;
 	}
 
 
-
+	//Used for deleting edges from the data 
 	bool Maze::compare_edge(Edge firstEdge, Edge secondEdge)
 	{
 		if(firstEdge.source.x == secondEdge.source.x)
@@ -336,6 +342,40 @@ using namespace std;
 					}
 				}
 			}
+		}
+
+		return false;
+
+	}
+
+	bool Maze::validate_edge(Edge chkEdge)
+	{
+		if(chkEdge.source.x < 0 || chkEdge.source.x > width)
+			return false; 
+		
+		if(chkEdge.source.y < 0 || chkEdge.source.y > height)
+			return false;
+
+		if(chkEdge.destination.x < 0 || chkEdge.destination.x > width)
+			return false;
+
+		if(chkEdge.destination.y < 0 || chkEdge.destination.y > height)
+			return false;
+		
+
+		for(int i = 0; i < NUM_DIRS; ++i)
+		{
+				if(chkEdge.source.x + xDirs[i] == chkEdge.destination.x)
+				{
+
+					if(chkEdge.source.y + yDirs[i] == chkEdge.destination.y)
+					{
+
+						return true;	
+					}
+
+				}
+
 		}
 
 		return false;

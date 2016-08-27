@@ -38,6 +38,9 @@ inputhandler.o: inputhandler.cpp inputhandler.h utility.h
 .PHONY: clean
 
 clean:
-	rm -rf *.o *.gch $(MAIN)
+	rm -rf *.o *.gch *.maze *.svg $(MAIN)
+
+ZIP:
+	zip s3488934 *.cpp *.h Makefile *.txt
 
 ###############################################################################

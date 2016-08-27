@@ -14,10 +14,9 @@
 #include <cstdlib>
 #include <chrono>
 #include <random>
-#include <unordered_set>
+#include <assert.h>
 
-#define LOAD_BINARY "--lb"
-#define GENERATE "-g"
+
 #define NUM_DIRS 4
 #define LEFT 0
 #define RIGHT 1
