@@ -10,7 +10,9 @@ using namespace std;
 
 #include "maze.h"
 
-	void Maze::init_maze(int width, int height, int seed)
+	Maze::Maze(){}
+
+	Maze::Maze(int width, int height, int seed)
 	{
 		this->width = width;
 		this->height = height;
@@ -163,6 +165,8 @@ using namespace std;
 
 		}
 
+		//Update number of edges
+		numEdges = edges.size();
 
 
 	}
@@ -229,7 +233,7 @@ using namespace std;
 
 			svgfile << "<rect width=\"" << width * MAGNIFY << "\" ";
 			svgfile << "height=\"" << height * MAGNIFY << "\" ";
-			svgfile << "style=\"fill:white\" />" << endl;;
+			svgfile << "style=\"fill:white\"/>" << endl;;
 			
 			//Write in all edges
 			for(unsigned int i = 0; i < edges.size(); ++i)
@@ -312,11 +316,8 @@ using namespace std;
 			binfile.read((char*) &castEdge->destination.y, sizeof(int));
 
 			if(!validate_edge(*castEdge))
-			{
-				cout << "Ruh-roh" << endl;
 				return false;
-			}
-
+			
 			edges.push_back(*castEdge);
 			
 		}

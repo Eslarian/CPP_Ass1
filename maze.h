@@ -65,8 +65,10 @@ class Maze
 		bool validate_edge(Edge chkEdge);
 		void make_gateways(Cell gateway);
 		void remove_edge(Edge deadEdge);
-		void init_maze(int width = 10, int height = 10, int seed = 0);
 		void gen_maze();
+
+		Maze(int width, int height, int seed);
+		Maze();
 
 		friend class Cell;
 

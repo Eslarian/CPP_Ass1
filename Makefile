@@ -41,6 +41,6 @@ clean:
 	rm -rf *.o *.gch *.maze *.svg $(MAIN)
 
 ZIP:
-	zip s3488934 *.cpp *.h Makefile *.txt
+	zip s3488934 *.cpp *.h Makefile *.txt *.pdf
 
 ###############################################################################

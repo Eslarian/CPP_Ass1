@@ -25,7 +25,7 @@ class InputHandler
 		vector<string> captures;
 		
 		bool check_input(char ** args, int numArgs);
-		bool execute_commands(Maze mazeObj);
+		bool execute_commands();
 		vector<string> string_splitter(string input, char delim);
 
 };

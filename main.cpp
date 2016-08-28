@@ -27,9 +27,8 @@ int main(int argc, char * argv[])
 		return EXIT_FAILURE; 
 	}
 	
-	Maze mazeObj;
 
-	inputHdl.execute_commands(mazeObj);
+	inputHdl.execute_commands();
 	
 	return EXIT_SUCCESS;
 }

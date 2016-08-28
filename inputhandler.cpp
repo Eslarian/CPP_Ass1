@@ -5,9 +5,9 @@ using namespace std;
 			
 bool InputHandler::check_input(char ** args, int numArgs)
 {
-	/*Whilst I've endeavoured to respect the 80 character limit, this particular
-	I could not find a way to separate this line of regex out, since it is 
-	sensitive to spaces as part of the matching*/
+	/*Whilst I've endeavoured to respect the 80 character limit, 
+	this particularI could not find a way to separate this line of regex out, 
+	since it is sensitive to spaces as part of the matching*/
 	regex test("^(--g(| [[:digit:]]*)(| [[:digit:]]{1,4})(| [[:digit:]]{1,4})((| --sv [[:alnum:]]*\\.svg)|(| --sb [[:alnum:]]*.[[:alnum:]]*)){1,2}$)|(--lb [[:alnum:]]*.[[:alnum:]]*(| --sv [[:alnum:]]*\\.svg)$)");
 	string input;
 	for(int i = 1; i < numArgs; i++)
@@ -35,7 +35,7 @@ bool InputHandler::check_input(char ** args, int numArgs)
 //Often, input captured by regex contains more than one important datapoint
 //As such, match lines are often split into a vector of strings to more easily
 //access the relevant information
-bool InputHandler::execute_commands(Maze mazeObj)
+bool InputHandler::execute_commands()
 {
 	int w,h,sd;
 	vector<string> splitStrings;
@@ -58,7 +58,7 @@ bool InputHandler::execute_commands(Maze mazeObj)
 		if(captures[HEIGHT] != "")
 			h = stoi(captures[HEIGHT],nullptr,10);
 
-		mazeObj.init_maze(w,h,sd);
+		Maze mazeObj(w,h,sd);
 		mazeObj.gen_maze();
 	
 		if(captures[SV_OP1] != "")
@@ -98,6 +98,8 @@ bool InputHandler::execute_commands(Maze mazeObj)
 	else if(splitStrings[FIRST_COMMAND] == LOAD_BINARY)
 	{
 		splitStrings = string_splitter(captures[LOAD_COMMAND],' ');
+		
+		Maze mazeObj;
 		mazeObj.load_binary(splitStrings[1]);
 
 		if(captures[SV_OP3] != "")
